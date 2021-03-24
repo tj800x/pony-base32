@@ -1,0 +1,12 @@
+{
+  "packages": ["base32"],
+  "deps": [],
+  "info": {
+    "description": "Pony implementation of RFC4648 Base32 encoding.",
+    "homepage": "https://tj800x.github.io/pony-base32/",
+    "license": "BSD-2-Clause",
+    "documentation_url": "https://tj800x.github.io/pony-base32/",
+    "version": "0.0.1",
+    "name": "base32"
+  }
+}
