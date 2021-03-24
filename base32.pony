@@ -7,7 +7,7 @@ based on rfc4648.  See https://tools.ietf.org/html/rfc4648.
 ## Example code
 
 ```pony
-use "encode/Base32"
+use "Base32"
 
 actor Main
   new create(env: Env) =>

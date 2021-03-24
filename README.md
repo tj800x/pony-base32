@@ -32,7 +32,6 @@ Corral Instructions:
 ```shell
 $ corral add github.com/tj800x/pony-base32.git
 $ corral run -- ponyc
-$ ./base32
 ```
 
 ### Tests
