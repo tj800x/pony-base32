@@ -40,23 +40,32 @@ $ corral run -- ponyc
 Running the project executable will execute the tests, which should look something like this:
 
 ```shell
-$ ./base32
-1 test started, 0 complete: Base32/Encode.foobar started
-2 tests started, 0 complete: Base32/Decode.Basic started
-3 tests started, 0 complete: Base32/Decode.Rfc4648 started
-3 tests started, 1 complete: Base32/Decode.Basic complete
-4 tests started, 1 complete: Base32/Decode.Impossible started
-5 tests started, 1 complete: Base32/Decode.Impossible.Chunked started
-5 tests started, 2 complete: Base32/Decode.Impossible.Chunked complete
-5 tests started, 3 complete: Base32/Encode.foobar complete
-5 tests started, 4 complete: Base32/Decode.Rfc4648 complete
-5 tests started, 5 complete: Base32/Decode.Impossible complete
+$ ./pony-base32
+1 test started, 0 complete: Base32/Encode.Empty started
+2 tests started, 0 complete: Base32/Encode.Basic started
+2 tests started, 1 complete: Base32/Encode.Empty complete
+3 tests started, 1 complete: Base32/Encode.foobar started
+4 tests started, 1 complete: Base32/Decode.Empty started
+4 tests started, 2 complete: Base32/Encode.foobar complete
+5 tests started, 2 complete: Base32/Decode.Basic started
+6 tests started, 2 complete: Base32/Decode.Foobar started
+7 tests started, 2 complete: Base32/Decode.Impossible started
+7 tests started, 3 complete: Base32/Decode.Basic complete
+8 tests started, 3 complete: Base32/Decode.Impossible.Chunked started
+8 tests started, 4 complete: Base32/Decode.Impossible.Chunked complete
+8 tests started, 5 complete: Base32/Encode.Basic complete
+8 tests started, 6 complete: Base32/Decode.Empty complete
+8 tests started, 7 complete: Base32/Decode.Foobar complete
+8 tests started, 8 complete: Base32/Decode.Impossible complete
+---- Passed: Base32/Encode.Empty
+---- Passed: Base32/Encode.Basic
 ---- Passed: Base32/Encode.foobar
+---- Passed: Base32/Decode.Empty
 ---- Passed: Base32/Decode.Basic
----- Passed: Base32/Decode.Rfc4648
+---- Passed: Base32/Decode.Foobar
 ---- Passed: Base32/Decode.Impossible
 ---- Passed: Base32/Decode.Impossible.Chunked
 ----
----- 5 tests ran.
----- Passed: 5
+---- 8 tests ran.
+---- Passed: 8
 ```
