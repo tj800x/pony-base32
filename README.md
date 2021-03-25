@@ -9,6 +9,9 @@ Each non-final Base32 digit represents exactly 5 bits of data. Five 8-bit bytes
 digits; this is known as a block.  RFC4648 compliant encoding requires that the 
 resultant string be a full block, so "remainder blocks" are padded with '=' characters.
 
+See: https://tools.ietf.org/html/rfc4648#section-6
+
+## Credits
 This project is based on the Base64 component that is included in the Standard Pony Library.
 
 ## Code Samples
@@ -23,8 +26,10 @@ actor Main
       env.out.print(Base32.decode[String iso]("MZXW6YTBOI======")?)
     end
 ```
+
 ## Notes
 * An error is raised during decoding if the string is not a valid Base32 encoded string. 
+* The library does not currently support the Base32Hex alphabet.
 
 
 ## Installation

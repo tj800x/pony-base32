@@ -118,16 +118,7 @@ primitive Base32
             let out7 = ((d and 0b00000011) << 3)                    // 00 00 00 d1 d0 00 00 00
             //  out8 (e) is unnecessary since it is always a pad    // 00 00 01 01 01 01 00 01
 
-            // for testing
             let out8 = padchar
-
-            // _XXXAAAAA
-            // _XXXAAABB
-            // _XXXBBBBB
-            // _XXXBCCCC
-            // _XXXCCCCC
-            // _XXXCCCCD
-            // _XXXDDDDD
 
             ////////////////////////////////////////////////////////////
             // Validate Remainder Block
