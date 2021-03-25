@@ -9,6 +9,8 @@ Each non-final Base32 digit represents exactly 5 bits of data. Five 8-bit bytes
 digits; this is known as a block.  RFC4648 compliant encoding requires that the 
 resultant string be a full block, so "remainder blocks" are padded with '=' characters.
 
+This project is based on the Base64 component that is included in the Standard Pony Library.
+
 ## Code Samples
 
 ```pony

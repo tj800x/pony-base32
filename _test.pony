@@ -1,66 +1,90 @@
 use "json" 
 use "ponytest"
 use "collections"
-//use "base32"
 
 actor Main is TestList
   new create(env: Env) => PonyTest(env, this)
   new make() => None
 
   fun tag tests(test: PonyTest) =>
-    test(_TestBase32Encode)
+
+    test(_TestBase32EncodeEmpty)
+    test(_TestBase32EncodeBasic)
+    test(_TestBase32EncodeFoobar)
+
+    test(_TestBase32DecodeEmpty)
     test(_TestBase32DecodeBasic)
-    test(_TestBase32DecodeRfc4648)
+    test(_TestBase32DecodeFoobar)
+
     test(_TestBase32DecodeImpossible)
     test(_TestBase32DecodeImpossibleChunked)
 
-class iso _TestBase32Encode is UnitTest
+
+class iso _TestBase32EncodeEmpty is UnitTest
   """
-  Test encoding of various values as Base32
+  Test the encoding of an empty string to empty
   """
-  fun name(): String => "Base32/Encode.foobar"
-  fun label(): String => "simple"
-
-    fun test_empty(h: TestHelper) =>
-        h.assert_eq[String val]("", Base32.encode("") )
- 
-    fun test_f(h: TestHelper) =>
-        h.assert_eq[String val]("MY======", Base32.encode("f") )
-
-    fun test_fo(h: TestHelper) =>
-        let expect = "MZXQ===="
-        let actual : String val = Base32.encode("fo")
-        h.assert_eq[String val](expect, actual)
-
-    fun test_foo(h: TestHelper) =>
-        let expect = "MZXW6==="
-        let actual : String val = Base32.encode("foo")
-        h.assert_eq[String val](expect, actual)
-
-    fun test_foob(h: TestHelper) =>
-        let expect = "MZXW6YQ="
-        let actual : String val = Base32.encode("foob")
-        h.assert_eq[String val](expect, actual)
-
-    fun test_fooba(h: TestHelper) =>
-        let expect = "MZXW6YTB"
-        let actual : String val = Base32.encode("fooba")
-        h.assert_eq[String val](expect, actual)
-
-    fun test_foobar(h: TestHelper) =>
-        let expect = "MZXW6YTBOI======"
-        let actual : String val = Base32.encode("foobar")
-        h.assert_eq[String val](expect, actual)
+  fun name(): String => "Base32/Encode.Empty"
+  fun label(): String => "encode"
 
     fun apply(h: TestHelper)  =>
+
+        // Empty strings encode to empty strings per RFC4648
         h.assert_eq[String val]("", Base32.encode("") )
 
-        test_f(h)
-        test_fo(h)
-        test_foo(h)
-        test_foob(h)
-        test_fooba(h)
-        test_foobar(h)
+
+class iso _TestBase32EncodeBasic is UnitTest
+  """
+  Test the encoding of simple values as Base32
+  """
+  fun name(): String => "Base32/Encode.Basic"
+  fun label(): String => "encode"
+
+    fun apply(h: TestHelper)  =>
+
+        h.assert_eq[String val]("GE======", Base32.encode("1") )
+        h.assert_eq[String val]("GI======", Base32.encode("2") )
+        h.assert_eq[String val]("GM======", Base32.encode("3") )
+
+        h.assert_eq[String val]("ME======", Base32.encode("a") )
+        h.assert_eq[String val]("IE======", Base32.encode("A") )
+        h.assert_eq[String val]("MFQQ====", Base32.encode("aa") )
+        h.assert_eq[String val]("MFQWC===", Base32.encode("aaa") )
+        h.assert_eq[String val]("MFQWCYI=", Base32.encode("aaaa") )
+        h.assert_eq[String val]("MFQWCYLB", Base32.encode("aaaaa") )
+        h.assert_eq[String val]("MFQWCYLBME======", Base32.encode("aaaaaa") )
+
+
+class iso _TestBase32EncodeFoobar is UnitTest
+  """
+  In an incremental fashion, test the encoding of "foobar" as Base32
+  """
+  fun name(): String => "Base32/Encode.foobar"
+  fun label(): String => "encode"
+
+    fun apply(h: TestHelper)  =>
+
+        h.assert_eq[String val](Base32.encode(""),"")
+        h.assert_eq[String val](Base32.encode("f"),"MY======" )
+        h.assert_eq[String val](Base32.encode("fo"),"MZXQ====" )
+        h.assert_eq[String val](Base32.encode("foo"),"MZXW6===" )
+        h.assert_eq[String val](Base32.encode("foob"),"MZXW6YQ=" )
+        h.assert_eq[String val](Base32.encode("fooba"),"MZXW6YTB" )
+        h.assert_eq[String val](Base32.encode("foobar"),"MZXW6YTBOI======" )
+
+
+class iso _TestBase32DecodeEmpty is UnitTest
+    """
+    Test Base32 decoding of various strings
+    """
+    fun name(): String => "Base32/Decode.Empty"
+    fun label(): String => "decode"
+
+    fun apply(h: TestHelper)  =>
+
+        h.assert_no_error({() ? =>
+            h.assert_eq[String]("1", Base32.decode[String iso]("GE======")?)
+        })
 
 
 class iso _TestBase32DecodeBasic is UnitTest
@@ -68,11 +92,11 @@ class iso _TestBase32DecodeBasic is UnitTest
     Test Base32 decoding of various strings
     """
     fun name(): String => "Base32/Decode.Basic"
+    fun label(): String => "decode"
 
     fun apply(h: TestHelper)  =>
 
         h.assert_no_error({() ? =>
-            h.assert_eq[String]("", Base32.decode[String iso]("")?)
             h.assert_eq[String]("1", Base32.decode[String iso]("GE======")?)
             h.assert_eq[String]("2", Base32.decode[String iso]("GI======")?)
             h.assert_eq[String]("3", Base32.decode[String iso]("GM======")?)
@@ -89,16 +113,16 @@ class iso _TestBase32DecodeBasic is UnitTest
         })
 
 
-class iso _TestBase32DecodeRfc4648 is UnitTest
+class iso _TestBase32DecodeFoobar is UnitTest
     """
     Test Base32 decoding of various strings
     """
-    fun name(): String => "Base32/Decode.Rfc4648"
+    fun name(): String => "Base32/Decode.Foobar"
+    fun label(): String => "decode"
 
     fun apply(h: TestHelper)  =>
 
         h.assert_no_error({() ? =>
-            h.assert_eq[String]("", Base32.decode[String iso]("")?)
             h.assert_eq[String]("f", Base32.decode[String iso]("MY======")?)
             h.assert_eq[String]("fo", Base32.decode[String iso]("MZXQ====")?)
             h.assert_eq[String]("foo", Base32.decode[String iso]("MZXW6===")?)
@@ -114,6 +138,7 @@ class iso _TestBase32DecodeImpossible is UnitTest
     Test Base32 impossible cases.  These should error.
     """
     fun name(): String => "Base32/Decode.Impossible"
+    fun label(): String => "decode"
 
     fun apply(h: TestHelper)  =>
 
@@ -142,6 +167,7 @@ class iso _TestBase32DecodeImpossibleChunked is UnitTest
     Test Base32 impossible cases chunked.  These should error.
     """
     fun name(): String => "Base32/Decode.Impossible.Chunked"
+    fun label(): String => "decode"
 
     fun apply(h: TestHelper)  =>
 
